@@ -8,8 +8,9 @@ transformers==3.5.1
 srsly==1.0.2
 tweepy
 nltk==3.5
-PyMySQL
 fuzzywuzzy==0.18.0
 scipy==1.5.0
 danlp==0.0.11
 xlrd==1.2.0
+mysqlclient==2.0.3
+mysql-connector-python==8.0.23
