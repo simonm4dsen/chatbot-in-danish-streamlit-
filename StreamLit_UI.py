@@ -58,7 +58,7 @@ mycursor,mydb = connect_ITU_database(st.secrets["DB_HOST"],
 def read_file_to_df(path, file, sep=";", encoding = "ISO-8859-1",sheet_name = 0):
 	file_type = file.split(".")[-1]
 	if file_type == "xlsx":
-    	if path == "":
+		if path == "":
 			return pd.read_excel(file,sheet_name = sheet_name)
 		else:
 			return pd.read_excel(path+"\\"+file,sheet_name = sheet_name)
