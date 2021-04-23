@@ -7,7 +7,14 @@ import copy
 import pandas as pd
 
 from nltk.corpus import stopwords
-stop_words = set(stopwords.words('danish'))
+
+try:
+	stop_words = set(stopwords.words('danish'))
+except:
+	import nltk
+	nltk.download('stopwords')
+	from nltk.corpus import stopwords
+	stop_words = set(stopwords.words('danish'))
 
 from bpemb import BPEmb
 bpemb_da = BPEmb(lang="da", vs=3000)
