@@ -58,11 +58,14 @@ mycursor,mydb = connect_ITU_database(st.secrets["DB_HOST"],
 def read_file_to_df(path, file, sep=";", encoding = "ISO-8859-1",sheet_name = 0):
     file_type = file.split(".")[-1]
     if file_type == "xlsx":
-        return pd.read_excel(path+"\\"+file,sheet_name = sheet_name)
+    	if path == "":
+        	return pd.read_excel(file,sheet_name = sheet_name)
+        else:
+        	return pd.read_excel(path+"\\"+file,sheet_name = sheet_name)
     else:
         return pd.read_csv(path+"\\"+file, sep=sep, encoding = encoding) #low_memory=False
 
-path = r"data"
+path = ""#r"data"
 file = "Agent intent mapping.xlsx"
 
 df_training = read_file_to_df(path,file, sheet_name = 0)
