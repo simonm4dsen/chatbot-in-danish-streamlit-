@@ -11,5 +11,5 @@ nltk==3.5
 fuzzywuzzy==0.18.0
 scipy==1.5.0
 danlp==0.0.11
-xlrd==1.2.0
+openpyxl
 mysql-connector
