@@ -56,7 +56,7 @@ def check_parameters(intent,df_parameters):
     parameters = df_parameters[df_parameters["Intent"] == intent]["parameters"]
     parameters = parameters.to_string(index=False)[1:]
     print(parameters)
-    if parameters ==  "NaN":
+    if str(parameters) ==  "NaN":
         return False
     else:
         return parameters.split(",")
