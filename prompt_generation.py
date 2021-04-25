@@ -10,19 +10,11 @@
 import pandas as pd
 import random
 
+from StreamLit_UI import read_file_to_df
+
+import streamlit as st
 
 # In[34]:
-
-
-def read_file_to_df(path, file, sep=";", encoding = "ISO-8859-1",sheet_name = 0):
-	file_type = file.split(".")[-1]
-	if file_type == "xlsx":
-		if path == "":
-			return pd.read_excel(file,sheet_name = sheet_name)
-		else:
-			return pd.read_excel(path+"\\"+file,sheet_name = sheet_name)
-	else:
-		return pd.read_csv(path+"\\"+file, sep=sep, encoding = encoding) #low_memory=False
 
 path = ""#r"data"
 file = "prompt-generation.xlsx"

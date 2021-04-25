@@ -34,6 +34,7 @@ from connect_ITU import write_line_to_table
 from tokenization import tokenize_df
 from tokenization import tokenize
 
+from danlp.models import load_bert_ner_model
 
 #SessionState saves variables that should NOT reset when Streamlit reruns the script
 # Conversation: List of strings which represent the conversation.
@@ -54,7 +55,15 @@ mycursor,mydb = connect_ITU_database(st.secrets["DB_HOST"],
 	st.secrets["DB_PASSWORD"])
 
 @st.cache
+def load_bert():
+	bert = load_bert_ner_model()
+	return bert
+
+bert = load_bert()
+
+@st.cache
 def read_file_to_df(path, file, sep=";", encoding = "ISO-8859-1",sheet_name = 0):
+	print("ran "+ file)
 	file_type = file.split(".")[-1]
 	if file_type == "xlsx":
 		if path == "":
@@ -136,7 +145,7 @@ def bot_response(conversation):
 				#log in conversation
 				ss.conversation += [required_parameters]
 				#search for existing parameters in prior conversation
-				ss.potential_parameters = NER_conversation(conversation)
+				ss.potential_parameters = NER_conversation(conversation, bert)
 
 	if ss.intent != None:
 		conversation_types = [msg[:4] for msg in ss.conversation]

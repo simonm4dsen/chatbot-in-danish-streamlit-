@@ -1,12 +1,21 @@
-def Our_NER(line):
-    from danlp.models import load_bert_ner_model
-    import pandas as pd
-    import re
-    from fuzzywuzzy import fuzz
-    from fuzzywuzzy import process
+from danlp.models import load_bert_ner_model
+import pandas as pd
+import re
+from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
 
-    bert = load_bert_ner_model()
-	
+import streamlit as st
+
+#@st.cache
+#def load_bert():
+#	from danlp.models import load_bert_ner_model
+#	bert = load_bert_ner_model()
+#	return bert
+
+def Our_NER(line, bert):
+
+    #bert = load_bert_ner_model()
+
     tokens, labels = bert.predict(line)
     tekst_tokenized = tokens
     predictions = bert.predict(tekst_tokenized, IOBformat=False)

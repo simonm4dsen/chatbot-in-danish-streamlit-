@@ -10,6 +10,8 @@ import numpy as np
 from tokenization import tokenize_df
 from tokenization import tokenize
 
+from StreamLit_UI import read_file_to_df
+
 from Our_NER import Our_NER
 
 # Our_NER returns an info_dict:
@@ -26,17 +28,6 @@ from Our_NER import Our_NER
 
 # In[2]:
 
-
-def read_file_to_df(path, file, sep=";", encoding = "ISO-8859-1",sheet_name = 0):
-    file_type = file.split(".")[-1]
-    if file_type == "xlsx":
-    	if path == "":
-    		return pd.read_excel(file,sheet_name = sheet_name)
-    	else:
-    		return pd.read_excel(path+"\\"+file,sheet_name = sheet_name)
-    else:
-        return pd.read_csv(path+"\\"+file, sep=sep, encoding = encoding) #low_memory=False
-
 path = ""#r"data"
 file = "Agent intent mapping.xlsx"
 
@@ -49,9 +40,9 @@ df_training = tokenize_df(df_training,column = "training_phrases")
 
 
 
-def NER_conversation(conversation):
+def NER_conversation(conversation,bert_model = bert):
     user_dialog = [msg[5:] for msg in conversation if msg[:4] == "You:"]
-    return Our_NER(". ".join(user_dialog))
+    return Our_NER(". ".join(user_dialog),bert_model)
 
 
 # In[24]:
@@ -85,7 +76,7 @@ def give_answer(intent,df_parameters = df_parameters,column = "Answer"):
 # In[73]:
 
 
-def parameter_collecter(intent,):#,info_dict, verification_dict,df_parameters = df_parameters,df_actions = df_actions):
+def parameter_collecter(intent):#,info_dict, verification_dict,df_parameters = df_parameters,df_actions = df_actions):
     parameters = check_parameters(intent)
     print(parameters)
     if parameters:
