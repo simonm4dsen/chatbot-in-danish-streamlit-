@@ -85,7 +85,7 @@ def parameter_collecter(intent,df_parameters):
     if parameters:
         return "Par:," + ",".join(parameters)
     else:
-        return give_answer(intent)
+        return give_answer(intent,df_parameters)
 
 
 # In[ ]:
