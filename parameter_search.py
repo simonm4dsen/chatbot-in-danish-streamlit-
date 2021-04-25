@@ -10,9 +10,11 @@ import numpy as np
 from tokenization import tokenize_df
 from tokenization import tokenize
 
-from StreamLit_UI import read_file_to_df
+#from StreamLit_UI import read_file_to_df
 
 from Our_NER import Our_NER
+
+import streamlit as st
 
 # Our_NER returns an info_dict:
 # info_dict['Phone Number'] = []
@@ -24,7 +26,17 @@ from Our_NER import Our_NER
 # info_dict['MemberID'] = []
 
 # alternated info_dict in Streamlit:
-
+@st.cache
+def read_file_to_df(path, file, sep=";", encoding = "ISO-8859-1",sheet_name = 0):
+	print("ran "+ file)
+	file_type = file.split(".")[-1]
+	if file_type == "xlsx":
+		if path == "":
+			return pd.read_excel(file,sheet_name = sheet_name)
+		else:
+			return pd.read_excel(path+"\\"+file,sheet_name = sheet_name)
+	else:
+		return pd.read_csv(path+"\\"+file, sep=sep, encoding = encoding) #low_memory=False
 
 # In[2]:
 
@@ -76,7 +88,7 @@ def give_answer(intent,df_parameters = df_parameters,column = "Answer"):
 # In[73]:
 
 
-def parameter_collecter(intent,):#,info_dict, verification_dict,df_parameters = df_parameters,df_actions = df_actions):
+def parameter_collecter(intent):
     parameters = check_parameters(intent)
     print(parameters)
     if parameters:
