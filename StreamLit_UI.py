@@ -74,17 +74,22 @@ def read_file_to_df(path, file, sep=";", encoding = "ISO-8859-1",sheet_name = 0)
 	else:
 		return pd.read_csv(path+"\\"+file, sep=sep, encoding = encoding) #low_memory=False
 
+@st.cache
+def read_file_and_tokenize(path, file,tokenize_column, sep=";", encoding = "ISO-8859-1",sheet_name = 0):
+	df = read_file_to_df(path,file, sheet_name = sheet_name)
+	return tokenize_df(df,column = tokenize_column)
+
 
 path = ""#r"data"
 file = "Agent intent mapping.xlsx"
 
-df_training = read_file_to_df(path,file, sheet_name = 0)
+df_training = read_file_and_tokenize(path,file,"training_phrases", sheet_name = 0)
 df_parameters = read_file_to_df(path,file, sheet_name = 1)
 df_actions = read_file_to_df(path,file, sheet_name = 2)
 
 df_prompt = read_file_to_df("","prompt-generation.xlsx")
 #tokenize training data - set parameters for tokenization here!
-df_training = tokenize_df(df_training,column = "training_phrases")
+#df_training = tokenize_df(df_training,column = "training_phrases")
 
 #-----------------------------------------------------------------
 

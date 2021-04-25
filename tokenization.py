@@ -5,7 +5,7 @@
 import re
 import copy
 import pandas as pd
-import streamlit as st
+#import streamlit as st
 
 from nltk.corpus import stopwords
 
@@ -159,7 +159,7 @@ def tokenize(string, bpemb = bpemb_da, n_grams = 2, recurring_n_grams = True, re
 
 # In[94]:
 
-@st.cache
+#@st.cache
 def tokenize_df(df,bpemb = bpemb_da, column = "training_phrases", n_grams = 2, recurring_n_grams = True, remove_stopwords = False):
     df[column] = df[column].apply(lambda x: tokenize(x, bpemb = bpemb, n_grams = n_grams, recurring_n_grams = recurring_n_grams, remove_stopwords = remove_stopwords))
     return df
