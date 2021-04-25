@@ -19,6 +19,7 @@ import time
 #from review_classification_v3 import chat_response
 from intent_classification import intent_classification
 from intent_classification import find_latest_index
+
 from parameter_search import parameter_collecter
 from parameter_search import NER_conversation
 from parameter_search import give_action
@@ -80,6 +81,7 @@ df_training = read_file_to_df(path,file, sheet_name = 0)
 df_parameters = read_file_to_df(path,file, sheet_name = 1)
 df_actions = read_file_to_df(path,file, sheet_name = 2)
 
+df_prompt = read_file_to_df("","prompt-generation.xlsx")
 #tokenize training data - set parameters for tokenization here!
 df_training = tokenize_df(df_training,column = "training_phrases")
 
@@ -115,7 +117,7 @@ def bot_response(conversation):
 				
 				for r in response:
 					if r in ["Unknown","small-talk"]:
-						return give_answer("Unknown")
+						return give_answer("Unknown",df_parameters)
 
 				present_choices(response)
 				return "Bot: Jeg er desværre ikke helt sikker på jeg forstår. Skrev du om {}?".format(" eller ".join(response))
@@ -125,13 +127,13 @@ def bot_response(conversation):
 					present_choices([response])
 					return "Bot: Vil du vide mere om {}? Så klik på knappen nedenfor!".format(response)
 				else:
-					return parameter_collecter(response)
+					return parameter_collecter(response,df_parameters)
 
 		elif ss.intent == None and latest_message_type == "Ver:":
 			#print(response)
 			ss.intent = latest_message
 			#if this is true, we have verified the users intent, and can move on to parameters
-			required_parameters = parameter_collecter(ss.intent)
+			required_parameters = parameter_collecter(ss.intent,df_parameters)
 			print(required_parameters)
 			if required_parameters[:4] == "Bot:":
 				ss.intent = None
@@ -164,13 +166,13 @@ def bot_response(conversation):
 			if par not in ss.verified_info_dict.keys():
 				if par in ss.potential_parameters.keys():
 					present_choices([ss.potential_parameters[par][0]])
-					return "Bot:"+give_action(par,"verify")+" "+ss.potential_parameters[par][0]
+					return "Bot:"+give_action(par,"verify",df_actions)+" "+ss.potential_parameters[par][0]
 				else:
-					return "Bot:"+give_action(par,"ask")
+					return "Bot:"+give_action(par,"ask",df_actions)
 
 	intent_copy = str(ss.intent)
 	ss.intent = None
-	return give_answer(intent_copy, column="completed") #give the final answer to the intent!
+	return give_answer(intent_copy,df_parameters, column="completed") #give the final answer to the intent!
 
 
 def print_messages(conversation):
@@ -277,7 +279,7 @@ def main():
 	st.markdown("Hvis du oplever fejl kan du også altid trykke på 'Reset Session State' for at nultille programmet.")
 
 	if st.button("giv scenarie"):
-		ss.scenario = return_random_prompt()
+		ss.scenario = return_random_prompt(df_prompt)
 		rerun()
 
 	st.markdown("**"+ss.scenario+"**")

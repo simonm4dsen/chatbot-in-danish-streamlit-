@@ -14,7 +14,7 @@ from tokenization import tokenize
 
 from Our_NER import Our_NER
 
-import streamlit as st
+#import streamlit as st
 
 # Our_NER returns an info_dict:
 # info_dict['Phone Number'] = []
@@ -26,29 +26,19 @@ import streamlit as st
 # info_dict['MemberID'] = []
 
 # alternated info_dict in Streamlit:
-@st.cache
-def read_file_to_df(path, file, sep=";", encoding = "ISO-8859-1",sheet_name = 0):
-	print("ran "+ file)
-	file_type = file.split(".")[-1]
-	if file_type == "xlsx":
-		if path == "":
-			return pd.read_excel(file,sheet_name = sheet_name)
-		else:
-			return pd.read_excel(path+"\\"+file,sheet_name = sheet_name)
-	else:
-		return pd.read_csv(path+"\\"+file, sep=sep, encoding = encoding) #low_memory=False
+
 
 # In[2]:
 
-path = ""#r"data"
-file = "Agent intent mapping.xlsx"
+#path = ""#r"data"
+#file = "Agent intent mapping.xlsx"
 
-df_training = read_file_to_df(path,file, sheet_name = 0)
-df_parameters = read_file_to_df(path,file, sheet_name = 1)
-df_actions = read_file_to_df(path,file, sheet_name = 2)
+#df_training = read_file_to_df(path,file, sheet_name = 0)
+#df_parameters = read_file_to_df(path,file, sheet_name = 1)
+#df_actions = read_file_to_df(path,file, sheet_name = 2)
 
 #tokenize training data - set parameters for tokenization here!
-df_training = tokenize_df(df_training,column = "training_phrases")
+#df_training = tokenize_df(df_training,column = "training_phrases")
 
 
 
@@ -60,7 +50,7 @@ def NER_conversation(conversation,bert_model):
 # In[24]:
 
 
-def check_parameters(intent,df_parameters = df_parameters):
+def check_parameters(intent,df_parameters):
     #if you need to collect parameters, return then as a list
     #otherwise return False
     parameters = df_parameters[df_parameters["Intent"] == intent]["parameters"]
@@ -76,7 +66,7 @@ def check_parameters(intent,df_parameters = df_parameters):
 
 
 # When you are done with collecting all parameters
-def give_answer(intent,df_parameters = df_parameters,column = "Answer"):
+def give_answer(intent,df_parameters,column = "Answer"):
     answer = df_parameters[df_parameters["Intent"] == intent][column]
     print(df_parameters[df_parameters["Intent"] == intent])
     print(intent)
@@ -88,8 +78,8 @@ def give_answer(intent,df_parameters = df_parameters,column = "Answer"):
 # In[73]:
 
 
-def parameter_collecter(intent):
-    parameters = check_parameters(intent)
+def parameter_collecter(intent,df_parameters):
+    parameters = check_parameters(intent,df_parameters)
     print(parameters)
     if parameters:
         return "Par:," + ",".join(parameters)
@@ -99,7 +89,7 @@ def parameter_collecter(intent):
 
 # In[ ]:
 # type: "ask","verify" or "options"
-def give_action(parameter,action,df_actions = df_actions):
+def give_action(parameter,action,df_actions):
     #if you need to collect parameters, return then as a list
     #otherwise return False
     action = df_actions[df_actions["parameter"] == parameter][action]
