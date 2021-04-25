@@ -9,9 +9,10 @@
 import mysql.connector
 import datetime
 
+import streamlit as st
 
 # In[2]:
-@st.cache
+#@st.cache
 def connect_ITU_database(host,database,user,password):
 	mydb = mysql.connector.connect(host=host,
 	                               user=user,
