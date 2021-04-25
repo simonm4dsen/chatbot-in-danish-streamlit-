@@ -52,7 +52,7 @@ df_training = tokenize_df(df_training,column = "training_phrases")
 
 
 
-def NER_conversation(conversation,bert_model = bert):
+def NER_conversation(conversation,bert_model):
     user_dialog = [msg[5:] for msg in conversation if msg[:4] == "You:"]
     return Our_NER(". ".join(user_dialog),bert_model)
 
