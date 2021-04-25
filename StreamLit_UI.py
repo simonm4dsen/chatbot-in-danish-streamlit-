@@ -48,13 +48,12 @@ from tokenization import tokenize
 # intent
 ss = SessionState.get(conversation=[],key=0,utterances=[],intent=None,potential_parameters={},verified_info_dict={},feedback_given=0,scenario="")
 
-
-#---- Replace this part with a connection to mySQL instead ------
 mycursor,mydb = connect_ITU_database(st.secrets["DB_HOST"],
 	st.secrets["DB_NAME"],
 	st.secrets["DB_USERNAME"],
 	st.secrets["DB_PASSWORD"])
 
+@st.cache
 def read_file_to_df(path, file, sep=";", encoding = "ISO-8859-1",sheet_name = 0):
 	file_type = file.split(".")[-1]
 	if file_type == "xlsx":

@@ -15,8 +15,10 @@ except:
 	nltk.download('stopwords')
 	from nltk.corpus import stopwords
 	stop_words = set(stopwords.words('danish'))
+	print("downloading stopwords")
 
 from bpemb import BPEmb
+
 bpemb_da = BPEmb(lang="da", vs=3000)
 
 # In[91]:
@@ -156,7 +158,7 @@ def tokenize(string, bpemb = bpemb_da, n_grams = 2, recurring_n_grams = True, re
 
 # In[94]:
 
-
+@st.cache
 def tokenize_df(df,bpemb = bpemb_da, column = "training_phrases", n_grams = 2, recurring_n_grams = True, remove_stopwords = False):
     df[column] = df[column].apply(lambda x: tokenize(x, bpemb = bpemb, n_grams = n_grams, recurring_n_grams = recurring_n_grams, remove_stopwords = remove_stopwords))
     return df

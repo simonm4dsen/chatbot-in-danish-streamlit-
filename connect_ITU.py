@@ -11,7 +11,7 @@ import datetime
 
 
 # In[2]:
-
+@st.cache
 def connect_ITU_database(host,database,user,password):
 	mydb = mysql.connector.connect(host=host,
 	                               user=user,
