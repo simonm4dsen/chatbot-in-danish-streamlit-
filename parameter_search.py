@@ -76,7 +76,7 @@ def give_answer(intent,df_parameters = df_parameters,column = "Answer"):
 # In[73]:
 
 
-def parameter_collecter(intent):#,info_dict, verification_dict,df_parameters = df_parameters,df_actions = df_actions):
+def parameter_collecter(intent,):#,info_dict, verification_dict,df_parameters = df_parameters,df_actions = df_actions):
     parameters = check_parameters(intent)
     print(parameters)
     if parameters:
