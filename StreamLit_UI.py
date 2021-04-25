@@ -74,6 +74,7 @@ def read_file_to_df(path, file, sep=";", encoding = "ISO-8859-1",sheet_name = 0)
 	else:
 		return pd.read_csv(path+"\\"+file, sep=sep, encoding = encoding) #low_memory=False
 
+
 path = ""#r"data"
 file = "Agent intent mapping.xlsx"
 
