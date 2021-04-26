@@ -93,7 +93,15 @@ def write_line_to_table(mycursor,mydb,table_name,values,columns = ["id","convers
 	mydb.commit()
 
 #-----------------------------------------------------------------
-### Tokenization functions
+### Tokenization function
+
+@st.cache
+def load_bpemb():
+	bpemb_da = BPEmb(lang="da", vs=3000)
+	return bpemb_da
+
+bpemb_da = load_bpemb()
+
 try:
 	stop_words = set(stopwords.words('danish'))
 except:
@@ -180,12 +188,9 @@ def load_data():
 
 	df_prompt = pd.read_exce("prompt-generation.xlsx")
 
-	bpemb_da = BPEmb(lang="da", vs=3000)
+	return bert, df_training, df_parameters, df_actions, df_prompt
 
-	return bert, df_training, df_parameters, df_actions, df_prompt, bpemb_da
-
-
-bert, df_training, df_parameters, df_actions, df_prompt, bpemb_da = load_data()
+bert, df_training, df_parameters, df_actions, df_prompt = load_data()
 
 #-----------------------------------------------------------------
 ### misc helper functions
