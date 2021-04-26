@@ -338,7 +338,7 @@ def give_action(parameter,action,df_actions):
     if str(action) ==  "NaN":
         return False
     else:
-        return action[1:]
+        return action#[1:]
 #-----------------------------------------------------------------
 ### The Naive bayes language model. Training and prediction functions
 
