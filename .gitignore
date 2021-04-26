@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+.streamlit/secrets.toml
+Untitled.ipynb
+~$Agent intent mapping.xlsx
