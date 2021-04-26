@@ -333,11 +333,12 @@ def give_action(parameter,action,df_actions):
     #if you need to collect parameters, return then as a list
     #otherwise return False
     action = df_actions[df_actions["parameter"] == parameter][action]
-    action = action.to_string(index=False)[1:]
-    if action ==  "NaN":
+    action = action.to_string(index=False)
+    print(action)
+    if str(action) ==  "NaN":
         return False
     else:
-        return action
+        return action[1:]
 #-----------------------------------------------------------------
 ### The Naive bayes language model. Training and prediction functions
 
