@@ -186,7 +186,7 @@ def load_data():
 	df_parameters = pd.read_excel("Agent intent mapping.xlsx",sheet_name = 1)
 	df_actions = pd.read_excel("Agent intent mapping.xlsx",sheet_name = 2)
 
-	df_prompt = pd.read_exce("prompt-generation.xlsx")
+	df_prompt = pd.read_excel("prompt-generation.xlsx")
 
 	return bert, df_training, df_parameters, df_actions, df_prompt
 
