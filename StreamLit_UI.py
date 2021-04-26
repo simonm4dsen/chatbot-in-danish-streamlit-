@@ -59,6 +59,28 @@ from danlp.models import load_bert_ner_model
 ss = SessionState.get(conversation=[],key=0,utterances=[],intent=None,potential_parameters={},verified_info_dict={},feedback_given=0,scenario="")
 
 #-----------------------------------------------------------------
+### misc helper functions
+def rerun():
+    raise st.script_runner.RerunException(st.script_request_queue.RerunData(None))
+
+def isNaN(num):
+    return num != num
+
+def string_contains(string,words):
+	string = re.sub("[,.!?#]", "", string)
+	for token in string.split(" "):
+		if token.lower() in words:
+			return True
+	return False
+
+#return the index of the last (right-most) "needle" (string) in haystack (list)
+def find_latest_index(needle,haystack):
+    if needle in haystack:
+        return - (haystack[::-1].index(needle) +1)
+    else:
+        return None
+
+#-----------------------------------------------------------------
 ### Connecting and writing to the ITU database ###
 @st.cache
 def connect_ITU_database(host,database,user,password):
@@ -191,28 +213,6 @@ def load_data():
 	return bert, df_training, df_parameters, df_actions, df_prompt
 
 bert, df_training, df_parameters, df_actions, df_prompt = load_data()
-
-#-----------------------------------------------------------------
-### misc helper functions
-def rerun():
-    raise st.script_runner.RerunException(st.script_request_queue.RerunData(None))
-
-def isNaN(num):
-    return num != num
-
-def string_contains(string,words):
-	string = re.sub("[,.!?#]", "", string)
-	for token in string.split(" "):
-		if token.lower() in words:
-			return True
-	return False
-
-#return the index of the last (right-most) "needle" (string) in haystack (list)
-def find_latest_index(needle,haystack):
-    if needle in haystack:
-        return - (haystack[::-1].index(needle) +1)
-    else:
-        return None
 
 #-----------------------------------------------------------------
 ### NER function using re and bert
