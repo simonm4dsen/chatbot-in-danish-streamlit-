@@ -698,7 +698,7 @@ def main():
 
 	if st.button("giv scenarie"):
 		ss.scenario = return_random_prompt(df_prompt)
-		rerun()
+		#rerun()
 
 	st.markdown("**"+ss.scenario+"**")
 	st.markdown("")
