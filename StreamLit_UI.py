@@ -117,7 +117,7 @@ def write_line_to_table(mycursor,mydb,table_name,values,columns = ["id","convers
 #-----------------------------------------------------------------
 ### Tokenization function
 
-@st.cache
+#@st.cache
 def load_bpemb():
 	bpemb_da = BPEmb(lang="da", vs=3000)
 	return bpemb_da
