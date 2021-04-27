@@ -91,7 +91,7 @@ def skipinitialspace(x):
 
 #-----------------------------------------------------------------
 ### Connecting and writing to the ITU database ###
-@st.cache(suppress_st_warning=True)
+#@st.cache(suppress_st_warning=True)
 def connect_ITU_database(host,database,user,password):
     st.write("Cache miss: connect_ITU_database ran")
     mydb = mysql.connector.connect(host=host,
