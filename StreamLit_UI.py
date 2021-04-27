@@ -801,6 +801,7 @@ def main():
 
 	elif ss.feedback_given == 99:
 		feedback_text_placeholder.success("Tak for din feedback!")
+        feedback_text_placeholder.write("Hvis du vil prøve igen, klik venligst på 'Reset session state' i venstre side")
 
 	#Welcome message print
 	if len(ss.conversation) == 0:
