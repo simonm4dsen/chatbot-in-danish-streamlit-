@@ -56,7 +56,9 @@ from danlp.models import load_bert_ner_model
 # utterances: list of strings containing all user utterances/ submissions
 # intent: if the bot is currently collecting parameters (etc email, name,...) this = the intent. Otherwise None
 # intent
-ss = SessionState.get(conversation=[],key=0,utterances=[],intent=None,potential_parameters={},verified_info_dict={},feedback_given=0,scenario="")
+ss = SessionState.get(conversation=[],key=0,utterances=[],
+    intent=None,potential_parameters={},verified_info_dict={},
+    feedback_given=0,scenario="")
 
 #-----------------------------------------------------------------
 ### misc helper functions
@@ -82,15 +84,16 @@ def find_latest_index(needle,haystack):
 
 #-----------------------------------------------------------------
 ### Connecting and writing to the ITU database ###
-@st.cache
+@st.cache(suppress_st_warning=True)
 def connect_ITU_database(host,database,user,password):
-	mydb = mysql.connector.connect(host=host,
-	                               user=user,
-	                               password=password,
-	                               charset='utf8',
-	                               database=database)
-	mycursor = mydb.cursor()
-	return mycursor,mydb
+    st.write("Cache miss: connect_ITU_database ran")
+    mydb = mysql.connector.connect(host=host,
+        user=user,
+        password=password,
+        charset='utf8',
+        database=database)
+    mycursor = mydb.cursor()
+    return mycursor,mydb
 
 mycursor,mydb = connect_ITU_database(st.secrets["DB_HOST"],
 	st.secrets["DB_NAME"],
@@ -117,10 +120,11 @@ def write_line_to_table(mycursor,mydb,table_name,values,columns = ["id","convers
 #-----------------------------------------------------------------
 ### Tokenization function
 
-@st.cache
+@st.cache(suppress_st_warning=True)
 def load_bpemb():
-	bpemb_da = BPEmb(lang="da", vs=3000)
-	return bpemb_da
+    st.write("Cache miss: load_bpemb ran")
+    bpemb_da = BPEmb(lang="da", vs=3000)
+    return bpemb_da
 
 bpemb_da = load_bpemb()
 
@@ -196,23 +200,29 @@ def tokenize_df(df,bpemb = bpemb_da, column = "training_phrases", n_grams = 2, r
 #-----------------------------------------------------------------
 ### Loading bert and dataframes ###
 #st.cache ensures that this function only runs once to improve runtime
-@st.cache
+@st.cache(suppress_st_warning=True)
 def load_data():
-	#load danlp bert model
-	bert = load_bert_ner_model()
+    #load danlp bert model
+    st.write("Cache miss: load_data ran")
 
-	#load dataframes (excel)
-	df_training = pd.read_excel("Agent intent mapping.xlsx",sheet_name = 0)
-	df_training = tokenize_df(df_training,column = "training_phrases")
+    bert = load_bert_ner_model()
 
-	df_parameters = pd.read_excel("Agent intent mapping.xlsx",sheet_name = 1)
-	df_actions = pd.read_excel("Agent intent mapping.xlsx",sheet_name = 2)
+    #load dataframes (excel)
+    df_training = pd.read_excel("Agent intent mapping.xlsx",sheet_name = 0)
+    df_training = tokenize_df(df_training,column = "training_phrases")
 
-	df_prompt = pd.read_excel("prompt-generation.xlsx")
+    df_parameters = pd.read_excel("Agent intent mapping.xlsx",sheet_name = 1)
+    df_actions = pd.read_excel("Agent intent mapping.xlsx",sheet_name = 2)
 
-	return bert, df_training, df_parameters, df_actions, df_prompt
+    df_prompt = pd.read_excel("prompt-generation.xlsx")
+
+    return bert, df_training, df_parameters, df_actions, df_prompt
 
 bert, df_training, df_parameters, df_actions, df_prompt = load_data()
+
+#st.write(df_training)
+#st.write(df_parameters)
+#st.write(df_actions)
 
 #-----------------------------------------------------------------
 ### NER function using re and bert
@@ -302,13 +312,15 @@ def NER_conversation(conversation,bert_model):
 def check_parameters(intent,df_parameters):
     #if you need to collect parameters, return then as a list
     #otherwise return False
+    print("Intent: "+intent)
     parameters = df_parameters[df_parameters["Intent"] == intent]["parameters"]
-    parameters = parameters.to_string(index=False)#[1:]
+    parameters = parameters.to_string(index=False)[1:]
     print(parameters)
-    if str(parameters) ==  "NaN":
+    if str(parameters) ==  "NaN" or str(parameters) ==  "nan" or isNaN(parameters):
+        print("no parameters")
         return False
     else:
-        return parameters[1:].split(",")
+        return parameters.split(",")
 
 # When you are done with collecting all parameters, the "answer" column for a specific intent is returned
 def give_answer(intent,df_parameters,column = "Answer"):
@@ -333,9 +345,10 @@ def give_action(parameter,action,df_actions):
     #if you need to collect parameters, return then as a list
     #otherwise return False
     action = df_actions[df_actions["parameter"] == parameter][action]
-    action = action.to_string(index=False)
-    print(action)
-    if str(action) ==  "NaN":
+    action = action.to_string(index=False)[1:]
+    print(""+action+"")
+    print("yolo")
+    if str(action) ==  "NaN" or str(action) ==  "nan" or isNaN(action):
         return False
     else:
         return action#[1:]
@@ -356,7 +369,9 @@ def probabilities(x):
 # Y_train: list of class/categories
 # c_p: Class probabilities - add if you have an initial probability distribution, otherwise get it from the data
 # c_p can also be = "equal", which is just a uniform distribution across each class
+@st.cache(suppress_st_warning=True)
 def naive_bayes_probabilities(X_train, y_train,classes_from_data=True, c_p = "equal"):
+    st.write("Cache miss: naive_bayes_probabilities ran")
     if classes_from_data==True:
     	classes = set(y_train)
     
