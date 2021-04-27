@@ -16,12 +16,12 @@ def Our_NER(line, bert):
 
     #bert = load_bert_ner_model()
 
-    tokens, labels = bert.predict(line)
-    tekst_tokenized = tokens
-    predictions = bert.predict(tekst_tokenized, IOBformat=False)
+    #tokens, labels = bert.predict(line)
+    #tekst_tokenized = tokens
+    #predictions = bert.predict(tekst_tokenized, IOBformat=False)
 
     info_dict = {}
-
+    '''
     for i in range(len(predictions['entities'])):
         if predictions['entities'][i]['type'] == 'PER':
             if 'Name' not in info_dict.keys():
@@ -51,7 +51,7 @@ def Our_NER(line, bert):
                     new_loc += " " +loc.capitalize()
             info_dict['Location'].append(new_loc.strip())
 
-            
+            '''
     loc2 = re.findall(r'[0-9]{4}',line)
     if len(loc2) and 'Location' not in info_dict.keys():
         info_dict['Location'] = []
