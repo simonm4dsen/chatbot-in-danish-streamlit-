@@ -82,6 +82,13 @@ def find_latest_index(needle,haystack):
     else:
         return None
 
+def skipinitialspace(x):
+    if str(x)[0] == " ":
+        x = skipinitialspace(str(x)[1:])
+    else:
+        return str(x)
+
+
 #-----------------------------------------------------------------
 ### Connecting and writing to the ITU database ###
 @st.cache(suppress_st_warning=True)
@@ -314,9 +321,10 @@ def check_parameters(intent,df_parameters):
     #otherwise return False
     print("Intent: "+intent)
     parameters = df_parameters[df_parameters["Intent"] == intent]["parameters"]
-    parameters = parameters.to_string(index=False)[1:]
+    parameters = parameters.to_string(index=False)
+    parameters = skipinitialspace(parameters)
     print(parameters)
-    if str(parameters) ==  "NaN" or str(parameters) ==  "nan" or isNaN(parameters):
+    if str(parameters) ==  "NaN" or str(parameters) ==  "nan" or isNaN(parameters) or parameters == None:
         print("no parameters")
         return False
     else:
@@ -345,10 +353,11 @@ def give_action(parameter,action,df_actions):
     #if you need to collect parameters, return then as a list
     #otherwise return False
     action = df_actions[df_actions["parameter"] == parameter][action]
-    action = action.to_string(index=False)[1:]
+    action = action.to_string(index=False)
+    action = skipinitialspace(action)
     print(""+action+"")
     print("yolo")
-    if str(action) ==  "NaN" or str(action) ==  "nan" or isNaN(action):
+    if str(action) ==  "NaN" or str(action) ==  "nan" or isNaN(action) or action == None:
         return False
     else:
         return action#[1:]
