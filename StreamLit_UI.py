@@ -127,7 +127,7 @@ def write_line_to_table(mycursor,mydb,table_name,values,columns = ["id","convers
 #-----------------------------------------------------------------
 ### Tokenization function
 
-@st.cache(suppress_st_warning=True, max_entries = 1)
+@st.cache(suppress_st_warning=True, max_entries = 1,ttl = 1800)
 def load_bpemb():
     st.write("Cache miss: load_bpemb ran")
     bpemb_da = BPEmb(lang="da", vs=3000)
@@ -207,7 +207,7 @@ def tokenize_df(df,bpemb = bpemb_da, column = "training_phrases", n_grams = 2, r
 #-----------------------------------------------------------------
 ### Loading bert and dataframes ###
 #st.cache ensures that this function only runs once to improve runtime
-@st.cache(suppress_st_warning=True, max_entries = 1)
+@st.cache(suppress_st_warning=True, max_entries = 1, ttl = 1800)
 def load_data():
     #load danlp bert model
     st.write("Cache miss: load_data ran")
@@ -378,7 +378,7 @@ def probabilities(x):
 # Y_train: list of class/categories
 # c_p: Class probabilities - add if you have an initial probability distribution, otherwise get it from the data
 # c_p can also be = "equal", which is just a uniform distribution across each class
-@st.cache(suppress_st_warning=True, max_entries = 2)
+@st.cache(suppress_st_warning=True, max_entries = 2, ttl = 1800)
 def naive_bayes_probabilities(X_train, y_train,classes_from_data=True, c_p = "equal"):
     st.write("Cache miss: naive_bayes_probabilities ran")
     if classes_from_data==True:
