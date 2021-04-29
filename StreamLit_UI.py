@@ -333,9 +333,9 @@ def check_parameters(intent,df_parameters):
 # When you are done with collecting all parameters, the "answer" column for a specific intent is returned
 def give_answer(intent,df_parameters,column = "Answer"):
     answer = df_parameters[df_parameters["Intent"] == intent][column]
-    print(df_parameters[df_parameters["Intent"] == intent])
-    #print(intent)
-    #print(answer)
+    #print(df_parameters[df_parameters["Intent"] == intent])
+    print(intent)
+    print(answer)
     return "Bot:" + answer.values[0]
 
 # return parameters if any, otherwise give the answer straight away
@@ -561,7 +561,7 @@ def bot_response(conversation):
 				
 				for r in response:
 					if r in ["Unknown","small-talk"]:
-						return give_answer("Unknown",df_parameters)
+						return give_answer("rephrase question",df_parameters)
 
 				present_choices(response)
 				return "Bot: Jeg er desværre ikke helt sikker på jeg forstår. Skrev du om {}?".format(" eller ".join(response))
